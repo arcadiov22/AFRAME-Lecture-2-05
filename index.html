@@ -4,71 +4,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <title>Loading and Displaying 3D Models in A-Frame</title>
-
-    <script>
-        // Prevent scroll zooming
-        window.addEventListener('wheel', e => e.preventDefault(), { passive: false });
-
-        // Log player/camera position every 0.5 seconds
-        AFRAME.registerComponent('log-position', {
-            init: function () {
-                this.lastTime = 0;
-            },
-            tick: function (time) {
-                if (time - this.lastTime > 500) {
-                    const pos = this.el.object3D.position;
-
-                    console.log(
-                        `Player -> X:${pos.x.toFixed(2)}  Y:${pos.y.toFixed(2)}  Z:${pos.z.toFixed(2)}`
-                    );
-
-                    this.lastTime = time;
-                }
-            }
-        });
-    </script>
+    <title>Animating 3D Objects in A-Frame VR</title>
 </head>
-
 <body>
     <a-scene>
 
-        <!-- Asset Management -->
+        <a-box 
+            color="#AA0000"
+            position="0 4 0"
+            animation="
+                property: rotation;
+                to: 0 360 0;
+                loop: true;
+                dur: 5000;
+                easing: linear;
+            ">
+        </a-box>
+
+        <!-- Asset Management System -->
         <a-assets>
-            <img id="sky" src="assets/clear-sunny-sky.jpg">
-            <a-asset-item id="castle-scene" src="assets/scene.gltf"></a-asset-item>
-            <a-asset-item id="catapult-obj" src="assets/Catapult.obj"></a-asset-item>
-            <a-asset-item id="catapult-mtl" src="assets/Catapult.mtl"></a-asset-item>
+            <img id="floor" src="assets/floor-1024.jpg">
         </a-assets>
+        
+        <!-- Ground -->
+         <a-plane src="#floor" shader="flat" rotation="-90 0 0" scale="5 5 1"></a-plane>
 
-        <!-- Sky Background -->
-        <a-sky src="#sky"></a-sky>
+        <!-- Camera -->
+         <a-entity position="0 0 8">
+            <a-camera></a-camera>
+         </a-entity>
 
-        <!-- Player Camera -->
-        <a-entity 
-            id="player"
-            camera
-            look-controls
-            wasd-controls="acceleration: 50"
-            position="0 5 10"
-            log-position>
+
+         <!-- Rotating Box -->
+        <a-box color="red"
+            position="0 4 0"
+            animation="property: rotation;
+                        to: 0 360 0;
+                        loop: true;
+                        dur: 5000;
+                        easing: linear">
+         </a-box>
+
+
+         <!-- Orbiting and Revolving Box -->
+
+         <a-entity position="0 4 0"
+          animation="property: rotation;
+                     to: 0 360 0;
+                     loop: true;
+                     dur: 5000;
+                     easing: linear">
+
+        <a-box color="#00AA00"
+                position="2 0 0"
+                animation="property: rotation;
+                            to: 0 -360 0;
+                            loop: true;
+                            dur: 5000;
+                            easing: linear">
+        </a-box>
+
         </a-entity>
 
-        <!-- Castle -->
-        <a-entity
-            gltf-model="#castle-scene"
-            position="0 0 0"
-            scale="500 500 500">
-        </a-entity>
+        <!-- Moving Box -->
+          <a-box color="#FFAA00"
+            position="0 0.5 0"
+            animation="property: position;
+                        from: -2 0.5 -2;
+                        to: -2 0.5 2;
+                        loop: true;
+                        dir: alternate;
+                        dur: 3000;
+                        easing: easeInOutCubic;">
+        </a-box>
 
-        <!-- Catapult -->
-        <a-entity
-            obj-model="obj: #catapult-obj; mtl: #catapult-mtl"
-            position="-53.64 0 294.73"
-            rotation="0 200 0"
-            scale="1 1 1">
-        </a-entity>
 
+        <!-- Scalling Box -->
+        <a-box color="#FFAA00"
+             position="2 0.5 0"
+             animation="property: scale;
+                        to: 0.2 1 5;
+                        loop: true;
+                        dir: alternate;
+                        dur: 3000;
+                        easing: easeInOutElastic;">
+        </a-box>
+
+        <!-- Color Animation -->
+        <a-sphere color="#0000AA"   
+            radius="0.5"
+             position="0 2.25 0"
+            animation="property: material.color;
+                       from: #00AAFF;
+                      to: #0000AA;
+                      loop: true;
+                      dir: alternate;
+                      dur: 1500;">
+        </a-sphere>
+
+        <!-- Opacity Animation -->
+        <a-cone color="#484848"
+            position="0 0.5 0"
+            animation="property: opacity;
+                        from: 1;
+                        to: 0;
+                        loop: true;
+                        dir: alternate;
+                        dur: 1500;">
+        </a-cone>
+         
     </a-scene>
 </body>
 </html>
